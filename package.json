@@ -61,7 +61,8 @@
   },
   "homepage": "https://github.com/RonRadtke/react-native-device-calendar#readme",
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^21.2.4",
@@ -161,8 +162,11 @@
       "commitMessage": "chore: release ${version}",
       "tagName": "v${version}"
     },
+    "hooks": {
+      "before:init": "yarn lint && yarn typecheck && yarn test --maxWorkers=2"
+    },
     "npm": {
-      "publish": false
+      "publish": true
     },
     "github": {
       "release": true
