@@ -92,11 +92,15 @@ Our pre-commit hooks verify that your commit message matches this format when co
 
 We use [release-it](https://github.com/release-it/release-it) to make it easier to publish new versions. It handles common tasks like bumping version based on semver, creating tags and releases etc.
 
-To publish new versions, run the following:
+To publish new versions, run the following on `master` with a `GITHUB_TOKEN` that may create releases:
 
 ```sh
 yarn release
 ```
+
+It bumps the version from the commit messages, writes the changelog, tags the commit and creates the GitHub release. The
+workflow [Publish](.github/workflows/publish.yml) then checks, builds and publishes that release to npm with provenance,
+using the repository secret `NPM_TOKEN`.
 
 
 ### Scripts
