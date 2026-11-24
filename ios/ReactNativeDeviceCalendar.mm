@@ -457,6 +457,10 @@ static NSDictionary *DialogResult(NSString *action, NSString *eventId)
     RejectMissingEvent(reject, eventId);
     return;
   }
+  // the system's view stays empty for a series itself and ignores its Done button: it gets the first occurrence
+  if (occurrence == nil && event.hasRecurrenceRules) {
+    event = [self eventWithId:eventId occurrence:@(OriginalStartOf(event))] ?: event;
+  }
   dispatch_async(dispatch_get_main_queue(), ^{
     [self
         presentDialog:^UIViewController *(ReactNativeDeviceCalendarDialog *dialog) {
