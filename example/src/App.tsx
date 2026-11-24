@@ -53,12 +53,13 @@ export default function App() {
   };
 
   const today = new Date();
-  const at = (days: number, hours: number) =>
+  const at = (days: number, hours: number, minutes = 0) =>
     new Date(
       today.getFullYear(),
       today.getMonth(),
       today.getDate() + days,
-      hours
+      hours,
+      minutes
     );
   const standups = events.filter((event) => event.recurrenceRule);
 
@@ -141,7 +142,7 @@ export default function App() {
               calendarId: calendarId!,
               title: 'Stand-up',
               startDate: at(0, 8),
-              endDate: at(0, 8.25),
+              endDate: at(0, 8, 15),
               recurrenceRule: { frequency: 'daily', occurrence: 5 },
             });
             log('Three events created');
@@ -162,11 +163,24 @@ export default function App() {
               {
                 title: 'Stand-up (later)',
                 startDate: at(1, 9),
-                endDate: at(1, 9.25),
+                endDate: at(1, 9, 15),
               },
               { occurrence: second.originalStartDate! }
             );
             log(`Occurrence changed as event ${id}`);
+          })}
+        />
+        <Button
+          title="Rename from 3rd"
+          disabled={standups.length < 3}
+          onPress={run(async () => {
+            const third = standups[2]!;
+            const id = await updateEvent(
+              third.id,
+              { title: 'Daily sync' },
+              { occurrence: third.originalStartDate!, futureEvents: true }
+            );
+            log(`Stand-ups from the 3rd on renamed, now event ${id}`);
           })}
         />
         <Button

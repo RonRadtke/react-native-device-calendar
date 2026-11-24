@@ -240,6 +240,15 @@ describe('recurrence rules', () => {
     expect(ruleFromNative(native)).toEqual({ ...rule, interval: 1 });
   });
 
+  it('drop ordinals other apps put into weekly rules, so the event stays writable', () => {
+    const read = ruleFromNative({
+      ...weekly,
+      daysOfTheWeek: [{ day: 2, weekNumber: 1 }],
+    });
+    expect(read.daysOfTheWeek).toEqual([{ day: 'monday' }]);
+    expect(() => ruleToNative(read)).not.toThrow();
+  });
+
   it('leave out what the platform reports empty', () => {
     expect(ruleFromNative(weekly)).toEqual({
       frequency: 'weekly',

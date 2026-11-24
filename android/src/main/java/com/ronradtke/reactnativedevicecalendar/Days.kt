@@ -8,6 +8,8 @@ import java.util.TimeZone
  * the library hands such events to JavaScript as local midnights. These convert between the two for the same calendar day.
  */
 internal object Days {
+  const val MILLIS = 24L * 60 * 60 * 1000
+
   private val UTC: TimeZone = TimeZone.getTimeZone("UTC")
 
   /** Midnight UTC of the calendar day that [millis] falls on in [zone] */

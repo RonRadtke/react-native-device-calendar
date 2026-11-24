@@ -173,9 +173,13 @@ export function ruleFromNative(rule: NativeRecurrenceRule): RecurrenceRule {
   };
   if (rule.endDate !== null) result.endDate = new Date(rule.endDate);
   if (rule.occurrence !== null) result.occurrence = rule.occurrence;
+  // other apps write ordinals into daily and weekly rules, where RFC 5545 gives them no meaning; leaving them out keeps the
+  // rule writable when the event is changed
+  const positional =
+    result.frequency === 'monthly' || result.frequency === 'yearly';
   if (rule.daysOfTheWeek.length > 0) {
     result.daysOfTheWeek = rule.daysOfTheWeek.map(({ day, weekNumber }) =>
-      weekNumber === 0
+      weekNumber === 0 || !positional
         ? { day: DAYS[day - 1] ?? 'sunday' }
         : { day: DAYS[day - 1] ?? 'sunday', weekNumber }
     );
