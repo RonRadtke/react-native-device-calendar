@@ -73,6 +73,19 @@ Remember to add tests for your change if possible. Run the unit tests by:
 yarn test
 ```
 
+The Android code has two more kinds of tests, run from `example/android`:
+
+```sh
+# the pure Kotlin code (recurrence rules, durations, dates) on the JVM
+./gradlew :ronradtke_react-native-device-calendar:testDebugUnitTest
+
+# the library against the calendar provider of a running emulator or device
+./gradlew :ronradtke_react-native-device-calendar:connectedDebugAndroidTest
+```
+
+The instrumented tests work in a local calendar of their own and delete it afterwards. With several devices connected, name
+one with `ANDROID_SERIAL`. CI runs all of them, the instrumented ones on an Android 14 emulator.
+
 
 ### Commit message convention
 
