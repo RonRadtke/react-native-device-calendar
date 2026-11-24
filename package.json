@@ -43,7 +43,12 @@
   "keywords": [
     "react-native",
     "ios",
-    "android"
+    "android",
+    "calendar",
+    "events",
+    "eventkit",
+    "calendarcontract",
+    "turbo-module"
   ],
   "repository": {
     "type": "git",
@@ -128,6 +133,7 @@
   },
   "jest": {
     "preset": "@react-native/jest-preset",
+    "globalSetup": "./jest.global-setup.js",
     "testEnvironmentOptions": {
       "customExportConditions": [
         "require",

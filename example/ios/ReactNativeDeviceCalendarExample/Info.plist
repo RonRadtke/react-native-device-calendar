@@ -34,6 +34,10 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>The example app reads and writes events to show what the library does.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>The example app reads and writes events to show what the library does.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>RCTNewArchEnabled</key>
