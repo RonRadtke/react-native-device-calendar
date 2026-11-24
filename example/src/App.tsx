@@ -11,10 +11,14 @@ import {
 import {
   createCalendar,
   createEvent,
+  createEventWithDialog,
   deleteCalendar,
+  deleteEvent,
   getCalendars,
   getEvents,
   getPermissionStatus,
+  getSources,
+  openEvent,
   requestPermission,
   updateEvent,
   type CalendarEvent,
@@ -26,28 +30,49 @@ function describe(event: CalendarEvent): string {
   const when = event.allDay
     ? `${event.startDate.toDateString()} – ${event.endDate.toDateString()} (all day)`
     : `${event.startDate.toLocaleString()} – ${event.endDate.toLocaleTimeString()}`;
-  return `${event.title}: ${when}`;
+  const repeats = event.recurrenceRule
+    ? `, every ${event.recurrenceRule.interval ?? 1} ${event.recurrenceRule.frequency}`
+    : '';
+  const alarms = event.alarms.length
+    ? `, alarms ${event.alarms.map((alarm) => alarm.relativeOffset).join('/')} min`
+    : '';
+  return `${event.title}: ${when}${repeats}${alarms}${event.isDetached ? ', changed' : ''}`;
 }
 
-/** Runs every call of the library against the calendars of this device */
+/** Runs the calls of the library against the calendars of this device */
 export default function App() {
   const [lines, setLines] = useState<string[]>([]);
   const [calendarId, setCalendarId] = useState<string | null>(null);
-  const [eventId, setEventId] = useState<string | null>(null);
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
 
   const log = (line: string) => setLines((previous) => [line, ...previous]);
   const run = (action: () => Promise<void>) => () => {
-    action().catch((error: Error) => log(`Error: ${error.message}`));
+    action().catch((error: Error & { code?: string }) =>
+      log(`Error ${error.code ?? ''}: ${error.message}`)
+    );
   };
 
   const today = new Date();
-  const at = (days: number, hours: number) =>
+  const at = (days: number, hours: number, minutes = 0) =>
     new Date(
       today.getFullYear(),
       today.getMonth(),
       today.getDate() + days,
-      hours
+      hours,
+      minutes
     );
+  const standups = events.filter((event) => event.recurrenceRule);
+
+  const read = async () => {
+    const found = await getEvents({
+      startDate: at(-1, 0),
+      endDate: at(14, 0),
+      calendarIds: [calendarId!],
+    });
+    setEvents(found);
+    log(`${found.length} events`);
+    found.forEach((event) => log(describe(event)));
+  };
 
   return (
     <View style={styles.screen}>
@@ -63,6 +88,14 @@ export default function App() {
           onPress={run(async () =>
             log(`Request: ${await requestPermission()}`)
           )}
+        />
+        <Button
+          title="Sources"
+          onPress={run(async () => {
+            for (const source of await getSources()) {
+              log(`Source ${source.name} (${source.type})`);
+            }
+          })}
         />
         <Button
           title="Calendars"
@@ -90,49 +123,96 @@ export default function App() {
           title="Add events"
           disabled={calendarId === null}
           onPress={run(async () => {
-            const meeting = await createEvent({
+            await createEvent({
               calendarId: calendarId!,
               title: 'Planning meeting',
               startDate: at(0, 9),
               endDate: at(0, 10),
               location: 'Room 2',
-              notes: 'Written by the example app',
+              alarms: [{ relativeOffset: -15 }],
             });
-            setEventId(meeting);
-            const holiday = await createEvent({
+            await createEvent({
               calendarId: calendarId!,
               title: 'Day off',
               startDate: at(1, 0),
               endDate: at(3, 0),
               allDay: true,
             });
-            log(`Events ${meeting} and ${holiday} created`);
-          })}
-        />
-        <Button
-          title="Move meeting"
-          disabled={eventId === null}
-          onPress={run(async () => {
-            await updateEvent(eventId!, {
+            await createEvent({
               calendarId: calendarId!,
-              title: 'Planning meeting (moved)',
-              startDate: at(0, 11),
-              endDate: at(0, 12),
+              title: 'Stand-up',
+              startDate: at(0, 8),
+              endDate: at(0, 8, 15),
+              recurrenceRule: { frequency: 'daily', occurrence: 5 },
             });
-            log(`Event ${eventId} moved`);
+            log('Three events created');
           })}
         />
         <Button
           title="Events"
           disabled={calendarId === null}
+          onPress={run(read)}
+        />
+        <Button
+          title="Move 2nd stand-up"
+          disabled={standups.length < 2}
           onPress={run(async () => {
-            const events = await getEvents({
-              startDate: at(-1, 0),
-              endDate: at(7, 0),
-              calendarIds: [calendarId!],
+            const second = standups[1]!;
+            const id = await updateEvent(
+              second.id,
+              {
+                title: 'Stand-up (later)',
+                startDate: at(1, 9),
+                endDate: at(1, 9, 15),
+              },
+              { occurrence: second.originalStartDate! }
+            );
+            log(`Occurrence changed as event ${id}`);
+          })}
+        />
+        <Button
+          title="Rename from 3rd"
+          disabled={standups.length < 3}
+          onPress={run(async () => {
+            const third = standups[2]!;
+            const id = await updateEvent(
+              third.id,
+              { title: 'Daily sync' },
+              { occurrence: third.originalStartDate!, futureEvents: true }
+            );
+            log(`Stand-ups from the 3rd on renamed, now event ${id}`);
+          })}
+        />
+        <Button
+          title="End stand-ups"
+          disabled={standups.length < 4}
+          onPress={run(async () => {
+            const fourth = standups[3]!;
+            await deleteEvent(fourth.id, {
+              occurrence: fourth.originalStartDate!,
+              futureEvents: true,
             });
-            log(`${events.length} events`);
-            events.forEach((event) => log(describe(event)));
+            log('Stand-ups from the 4th on deleted');
+          })}
+        />
+        <Button
+          title="Open first"
+          disabled={events.length === 0}
+          onPress={run(async () =>
+            log(
+              `View closed: ${await openEvent(events[0]!.id, { allowsEditing: true })}`
+            )
+          )}
+        />
+        <Button
+          title="Editor"
+          onPress={run(async () => {
+            const result = await createEventWithDialog({
+              title: 'Dentist',
+              startDate: at(2, 14),
+              endDate: at(2, 15),
+            });
+            log(`Editor: ${result.action}${result.id ? ` ${result.id}` : ''}`);
           })}
         />
         <Button
@@ -141,7 +221,7 @@ export default function App() {
           onPress={run(async () => {
             log(`Deleted: ${await deleteCalendar(calendarId!)}`);
             setCalendarId(null);
-            setEventId(null);
+            setEvents([]);
           })}
         />
       </View>

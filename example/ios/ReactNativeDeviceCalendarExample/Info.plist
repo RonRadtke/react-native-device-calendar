@@ -36,6 +36,8 @@
 	</dict>
 	<key>NSCalendarsFullAccessUsageDescription</key>
 	<string>The example app reads and writes events to show what the library does.</string>
+	<key>NSCalendarsWriteOnlyAccessUsageDescription</key>
+	<string>The example app adds events to show what the library does.</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>The example app reads and writes events to show what the library does.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

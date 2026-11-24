@@ -1,170 +1,132 @@
-import NativeDeviceCalendar, {
-  type NativeEvent,
-  type NativeEventInput,
-} from './NativeReactNativeDeviceCalendar';
+import NativeDeviceCalendar from './NativeReactNativeDeviceCalendar';
+import {
+  attendeeFromNative,
+  calendarFromNative,
+  checkColor,
+  eventFromNative,
+  eventToNative,
+  mergeChanges,
+} from './convert';
+import type {
+  Attendee,
+  Calendar,
+  CalendarChanges,
+  CalendarEvent,
+  CalendarOptions,
+  DialogAction,
+  DialogEventDetails,
+  DialogResult,
+  EventChanges,
+  EventDetails,
+  EventsQuery,
+  OpenEventOptions,
+  PermissionOptions,
+  PermissionStatus,
+  RecurringEventOptions,
+  Source,
+} from './types';
 
-/**
- * Whether the app may read and write the calendars.
- *
- * - `granted`: full access
- * - `undetermined`: the person has not been asked yet; on Android also after a refusal, since Android tells the two apart only by asking
- * - `denied`: refused, or on iOS 17 and later write-only access, which cannot read events
- * - `restricted`: iOS only, blocked by parental controls or a device management profile
- */
-export type PermissionStatus =
-  'granted' | 'denied' | 'undetermined' | 'restricted';
+export * from './types';
+export { allDayRange } from './convert';
 
-export type Calendar = {
-  id: string;
-  title: string;
-  /** `#RRGGBB` */
-  color: string;
-  /** The account the calendar belongs to, such as an e-mail address, "iCloud" or the name of a local account */
-  source: string;
-  /** Android: the account type, such as `com.google` or `LOCAL`; iOS: `local`, `exchange`, `caldav`, `mobileme`, `subscribed` or `birthdays` */
-  sourceType: string;
-  /** Android: the primary calendar of its account; iOS: the default calendar for new events */
-  isPrimary: boolean;
-  /** Whether the app may add, change and delete events in it */
-  allowsModifications: boolean;
-};
+/** An error of the platform; `code` names what went wrong (see the README) */
+export type CalendarError = Error & { code: string };
 
-export type CalendarOptions = {
-  title: string;
-  /** `#RRGGBB` */
-  color: string;
-  /**
-   * Android only: the name of the local account that holds the calendar. Android lets an app create calendars only in a local account, so
-   * the calendar stays on the device. Defaults to the app's name. iOS puts the calendar into iCloud when the person uses it, else onto the
-   * device.
-   */
-  accountName?: string;
-};
-
-export type CalendarEvent = {
-  /** The same for every occurrence of a recurring event */
-  id: string;
-  calendarId: string;
-  title: string;
-  /** All-day events start at local midnight of their first day */
-  startDate: Date;
-  /** All-day events end at local midnight after their last day */
-  endDate: Date;
-  allDay: boolean;
-  location?: string;
-  notes?: string;
-};
-
-export type EventInput = {
-  calendarId: string;
-  title: string;
-  startDate: Date;
-  /**
-   * The end, exclusive. An all-day event covers every local day from the day of `startDate` up to `endDate`: from 19 August 00:00 to 21
-   * August 00:00 are the 19th and the 20th. An end that is not a midnight counts its day in.
-   */
-  endDate: Date;
-  allDay?: boolean;
-  location?: string;
-  notes?: string;
-};
-
-export type EventsQuery = {
-  startDate: Date;
-  endDate: Date;
-  /** Only events of these calendars; all calendars when left out */
-  calendarIds?: string[];
-};
-
-function midnight(date: Date): Date {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+function rejection(code: string, message: string): CalendarError {
+  return Object.assign(new Error(message), { code });
 }
 
-/** The local midnights an all-day event runs between, the end exclusive and at least one day after the start */
-export function allDayRange(
-  startDate: Date,
-  endDate: Date
-): { start: Date; end: Date } {
-  const start = midnight(startDate);
-  let end = midnight(endDate);
-  if (end < endDate)
-    end = new Date(end.getFullYear(), end.getMonth(), end.getDate() + 1);
-  if (end <= start)
-    end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 1);
-  return { start, end };
-}
-
-function toNative(event: EventInput): NativeEventInput {
-  if (!(event.endDate >= event.startDate)) {
-    throw new RangeError('endDate must not be before startDate');
+/** The span and occurrence of a call on a recurring event */
+function recurring(options: RecurringEventOptions | undefined): {
+  span: string;
+  occurrence: number | null;
+} {
+  if (options?.occurrence === undefined) {
+    if (options?.futureEvents) {
+      throw new RangeError('futureEvents needs the occurrence they start at');
+    }
+    return { span: 'all', occurrence: null };
   }
-  const allDay = event.allDay === true;
-  const range = allDay
-    ? allDayRange(event.startDate, event.endDate)
-    : { start: event.startDate, end: event.endDate };
+  if (Number.isNaN(options.occurrence.getTime())) {
+    throw new RangeError('occurrence must be a valid date');
+  }
   return {
-    calendarId: event.calendarId,
-    title: event.title,
-    startDate: range.start.getTime(),
-    endDate: range.end.getTime(),
-    allDay,
-    location: event.location ?? null,
-    notes: event.notes ?? null,
+    span: options.futureEvents ? 'future' : 'this',
+    occurrence: options.occurrence.getTime(),
   };
 }
 
-function fromNative(event: NativeEvent): CalendarEvent {
-  const result: CalendarEvent = {
-    id: event.id,
-    calendarId: event.calendarId,
-    title: event.title,
-    startDate: new Date(event.startDate),
-    endDate: new Date(event.endDate),
-    allDay: event.allDay,
-  };
-  if (event.location) result.location = event.location;
-  if (event.notes) result.notes = event.notes;
-  return result;
-}
+// Permission
 
-/** Whether the app may read and write the calendars, without asking */
+/** Whether the app may use the calendars, without asking */
 export async function getPermissionStatus(): Promise<PermissionStatus> {
   return (await NativeDeviceCalendar.getPermissionStatus()) as PermissionStatus;
 }
 
-/** Asks the person for full access to the calendars, unless the app has it */
-export async function requestPermission(): Promise<PermissionStatus> {
-  return (await NativeDeviceCalendar.requestPermission()) as PermissionStatus;
+/** Asks the person for access to the calendars, unless the app has it or may no longer ask */
+export async function requestPermission(
+  options?: PermissionOptions
+): Promise<PermissionStatus> {
+  return (await NativeDeviceCalendar.requestPermission(
+    options?.writeOnly === true
+  )) as PermissionStatus;
 }
 
-/** The calendars of the device that hold events */
-export function getCalendars(): Promise<Calendar[]> {
-  return NativeDeviceCalendar.getCalendars();
+// Sources and calendars
+
+/** The accounts that hold calendars */
+export function getSources(): Promise<Source[]> {
+  return NativeDeviceCalendar.getSources();
+}
+
+/** Every calendar of the device that holds events */
+export async function getCalendars(): Promise<Calendar[]> {
+  return (await NativeDeviceCalendar.getCalendars()).map(calendarFromNative);
+}
+
+/** iOS: the calendar new events go into by default. Android has no such calendar and answers null; see {@link Calendar.isPrimary} */
+export async function getDefaultCalendar(): Promise<Calendar | null> {
+  const calendar = await NativeDeviceCalendar.getDefaultCalendar();
+  return calendar ? calendarFromNative(calendar) : null;
 }
 
 /** Creates a calendar of the app's own and returns its id */
 export async function createCalendar(
   options: CalendarOptions
 ): Promise<string> {
-  if (!/^#[0-9a-fA-F]{6}$/.test(options.color)) {
-    throw new RangeError('color must be #RRGGBB');
-  }
+  checkColor(options.color);
   return NativeDeviceCalendar.createCalendar({
     title: options.title,
     color: options.color,
+    sourceId: options.sourceId ?? null,
     accountName: options.accountName ?? null,
+    timeZone: options.timeZone ?? null,
+  });
+}
+
+/** Renames or recolours a calendar */
+export async function updateCalendar(
+  id: string,
+  changes: CalendarChanges
+): Promise<void> {
+  if (changes.color !== undefined) checkColor(changes.color);
+  return NativeDeviceCalendar.updateCalendar(id, {
+    title: changes.title ?? null,
+    color: changes.color ?? null,
   });
 }
 
 /**
- * Deletes a calendar with all its events. Returns false when there is no such calendar, or on Android when it is not one of a local account
- * (a calendar of a Google or Exchange account belongs to that account).
+ * Deletes a calendar with all its events. Returns false when there is no such calendar, or on Android when it is not one of a local
+ * account: a calendar of a Google or Exchange account belongs to that account.
  */
 export function deleteCalendar(id: string): Promise<boolean> {
   return NativeDeviceCalendar.deleteCalendar(id);
 }
 
-/** The events that overlap the period; a recurring event once per occurrence */
+// Events
+
+/** The events that overlap the period, a recurring event once per occurrence */
 export async function getEvents(query: EventsQuery): Promise<CalendarEvent[]> {
   if (!(query.endDate > query.startDate)) {
     throw new RangeError('endDate must be after startDate');
@@ -174,26 +136,122 @@ export async function getEvents(query: EventsQuery): Promise<CalendarEvent[]> {
     query.endDate.getTime(),
     query.calendarIds ?? []
   );
-  return events.map(fromNative);
+  return events.map(eventFromNative);
+}
+
+/** An event, or one occurrence of a recurring event; null when there is none */
+export async function getEvent(
+  id: string,
+  options?: Pick<RecurringEventOptions, 'occurrence'>
+): Promise<CalendarEvent | null> {
+  const { occurrence } = recurring({ occurrence: options?.occurrence });
+  const event = await NativeDeviceCalendar.getEvent(id, occurrence);
+  return event ? eventFromNative(event) : null;
 }
 
 /** Adds an event and returns its id */
-export async function createEvent(event: EventInput): Promise<string> {
-  return NativeDeviceCalendar.createEvent(toNative(event));
+export async function createEvent(event: EventDetails): Promise<string> {
+  return NativeDeviceCalendar.createEvent(eventToNative(event));
 }
 
 /**
- * Changes an event. Its calendar stays: to move an event, delete it and create it in the other calendar. A recurring event cannot be
- * changed (`E_RECURRING`).
+ * Changes an event: what `changes` leaves out stays. Returns the id of the changed event, which differs from `id` when one occurrence of
+ * a recurring event on Android becomes an event of its own. The calendar stays: to move an event, delete it and create it in the other
+ * calendar.
  */
 export async function updateEvent(
   id: string,
-  event: EventInput
-): Promise<void> {
-  return NativeDeviceCalendar.updateEvent(id, toNative(event));
+  changes: EventChanges,
+  options?: RecurringEventOptions
+): Promise<string> {
+  const { span, occurrence } = recurring(options);
+  if (span === 'this' && changes.recurrenceRule !== undefined) {
+    throw new RangeError(
+      'a single occurrence has no rule of its own: change the whole event or the future events'
+    );
+  }
+  const current = await NativeDeviceCalendar.getEvent(id, occurrence);
+  if (!current) {
+    throw rejection('E_NOT_FOUND', `There is no event ${id}`);
+  }
+  const merged = mergeChanges(eventFromNative(current), changes);
+  if (span === 'this') delete merged.recurrenceRule;
+  return NativeDeviceCalendar.updateEvent(
+    id,
+    eventToNative(merged),
+    span,
+    occurrence
+  );
 }
 
-/** Deletes an event, with every occurrence when it recurs. Returns false when there is no such event */
-export function deleteEvent(id: string): Promise<boolean> {
-  return NativeDeviceCalendar.deleteEvent(id);
+/** Deletes an event, by default with every occurrence. Returns false when there is no such event */
+export async function deleteEvent(
+  id: string,
+  options?: RecurringEventOptions
+): Promise<boolean> {
+  const { span, occurrence } = recurring(options);
+  return NativeDeviceCalendar.deleteEvent(id, span, occurrence);
+}
+
+/** The people invited to an event. Apps cannot invite people through EventKit, so the library only reads them */
+export async function getAttendees(
+  id: string,
+  options?: Pick<RecurringEventOptions, 'occurrence'>
+): Promise<Attendee[]> {
+  const { occurrence } = recurring({ occurrence: options?.occurrence });
+  return (await NativeDeviceCalendar.getAttendees(id, occurrence)).map(
+    attendeeFromNative
+  );
+}
+
+// The system's calendar screens
+
+/**
+ * Shows an event in the system's event view. iOS resolves when the person closes it; Android opens the calendar app and resolves
+ * with `done` at once.
+ */
+export async function openEvent(
+  id: string,
+  options?: OpenEventOptions
+): Promise<DialogAction> {
+  const { occurrence } = recurring({ occurrence: options?.occurrence });
+  return (await NativeDeviceCalendar.openEvent(
+    id,
+    occurrence,
+    options?.allowsEditing === true
+  )) as DialogAction;
+}
+
+/**
+ * Lets the person create an event in the system's editor, starting with `details`. Needs no permission on Android, and on iOS 17 and
+ * later none either. iOS tells whether the event was saved and its id; Android only that the editor opened.
+ */
+export async function createEventWithDialog(
+  details: DialogEventDetails = {}
+): Promise<DialogResult> {
+  const result = await NativeDeviceCalendar.createEventWithDialog({
+    calendarId: details.calendarId ?? null,
+    title: details.title ?? null,
+    startDate: details.startDate ? details.startDate.getTime() : null,
+    endDate: details.endDate ? details.endDate.getTime() : null,
+    allDay: details.allDay ?? null,
+    location: details.location ?? null,
+    notes: details.notes ?? null,
+    url: details.url ?? null,
+  });
+  return result.id
+    ? { action: result.action as DialogAction, id: result.id }
+    : { action: result.action as DialogAction };
+}
+
+/** Lets the person change an event in the system's editor */
+export async function editEventWithDialog(
+  id: string,
+  options?: Pick<RecurringEventOptions, 'occurrence'>
+): Promise<DialogResult> {
+  const { occurrence } = recurring({ occurrence: options?.occurrence });
+  const result = await NativeDeviceCalendar.editEventWithDialog(id, occurrence);
+  return result.id
+    ? { action: result.action as DialogAction, id: result.id }
+    : { action: result.action as DialogAction };
 }
