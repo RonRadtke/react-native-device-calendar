@@ -1,6 +1,6 @@
 {
   "name": "@ronradtke/react-native-device-calendar",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "description": "Read and write the iOS and Android device calendars from React Native: a small Turbo Module on EventKit and CalendarContract",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
@@ -26,6 +26,8 @@
     "!android/gradlew",
     "!android/gradlew.bat",
     "!android/local.properties",
+    "!android/src/test",
+    "!android/src/androidTest",
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__",
@@ -54,7 +56,7 @@
     "type": "git",
     "url": "git+https://github.com/RonRadtke/react-native-device-calendar.git"
   },
-  "author": "Ron Radtke <noreply@users.noreply.github.com> (https://github.com/RonRadtke)",
+  "author": "Ron Radtke <dev@ikascripts.de> (https://github.com/RonRadtke)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/RonRadtke/react-native-device-calendar/issues"
@@ -175,7 +177,8 @@
       "@release-it/conventional-changelog": {
         "preset": {
           "name": "angular"
-        }
+        },
+        "infile": "CHANGELOG.md"
       }
     }
   },

@@ -13,6 +13,10 @@ This project is a monorepo managed using [Yarn workspaces](https://yarnpkg.com/f
 
 To get started with the project, make sure you have the correct version of [Node.js](https://nodejs.org/) installed. See the [`.nvmrc`](./.nvmrc) file for the version used in this project.
 
+Yarn comes through [Corepack](https://github.com/nodejs/corepack), which ships with Node.js. Enable it once with
+`corepack enable`; on Windows, where Node.js sits in `Program Files`, put the shims into the npm folder on your `PATH`
+instead: `corepack enable --install-directory "%APPDATA%\npm" yarn`.
+
 Run `yarn` in the root directory to install the required dependencies for each package:
 
 ```sh
@@ -125,7 +129,7 @@ Releases are published by hand. Log in to npm once (`npm login`), then run the f
 yarn release
 ```
 
-It lints, type-checks and tests, bumps the version from the commit messages, writes the changelog, tags the commit,
+It lints, type-checks and tests, bumps the version from the commit messages, writes `CHANGELOG.md`, tags the commit,
 builds and publishes the package to npm (asking for your one-time password) and creates the GitHub release.
 
 
