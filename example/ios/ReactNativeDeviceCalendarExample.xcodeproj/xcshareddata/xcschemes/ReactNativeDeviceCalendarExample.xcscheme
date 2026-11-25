@@ -32,7 +32,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "00E356ED1AD99517003FC87E"
+               BlueprintIdentifier = "4761BAE01C793915A20DB62A"
                BuildableName = "ReactNativeDeviceCalendarExampleTests.xctest"
                BlueprintName = "ReactNativeDeviceCalendarExampleTests"
                ReferencedContainer = "container:ReactNativeDeviceCalendarExample.xcodeproj">

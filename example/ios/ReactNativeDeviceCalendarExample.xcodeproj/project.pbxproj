@@ -9,23 +9,45 @@
 /* Begin PBXBuildFile section */
 		0C80B921A6F3F58F76C31292 /* libPods-ReactNativeDeviceCalendarExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-ReactNativeDeviceCalendarExample.a */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		3A6A268922EBC0E8B93E19ED /* EventKitIntegrationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = F49CEE18FB7A55F0CCA3C805 /* EventKitIntegrationTests.mm */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		761780EF2CA45674006654EF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EE2CA45674006654EF /* SceneDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		864F07E9CDB089EBF0367BC5 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE3BBA10381D6A2DE666C635 /* EventKit.framework */; };
+		B044E6BB8ECF0D011400111E /* DeviceCalendarConversionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 251FC7781B716062E497698F /* DeviceCalendarConversionTests.mm */; };
+		B9B8B1CBF710E3BEF760CFCD /* libPods-ReactNativeDeviceCalendarExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BDAED178990CE2D935FFE67 /* libPods-ReactNativeDeviceCalendarExampleTests.a */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		862E06B77760EFF3CE023817 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
+			remoteInfo = ReactNativeDeviceCalendarExample;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		0BDAED178990CE2D935FFE67 /* libPods-ReactNativeDeviceCalendarExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReactNativeDeviceCalendarExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07F961A680F5B00A75B9A /* ReactNativeDeviceCalendarExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReactNativeDeviceCalendarExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ReactNativeDeviceCalendarExample/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ReactNativeDeviceCalendarExample/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = ReactNativeDeviceCalendarExample/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		251FC7781B716062E497698F /* DeviceCalendarConversionTests.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = DeviceCalendarConversionTests.mm; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-ReactNativeDeviceCalendarExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeDeviceCalendarExample.debug.xcconfig"; path = "Target Support Files/Pods-ReactNativeDeviceCalendarExample/Pods-ReactNativeDeviceCalendarExample.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-ReactNativeDeviceCalendarExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeDeviceCalendarExample.release.xcconfig"; path = "Target Support Files/Pods-ReactNativeDeviceCalendarExample/Pods-ReactNativeDeviceCalendarExample.release.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-ReactNativeDeviceCalendarExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReactNativeDeviceCalendarExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = ReactNativeDeviceCalendarExample/AppDelegate.swift; sourceTree = "<group>"; };
 		761780EE2CA45674006654EF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SceneDelegate.swift; path = ReactNativeDeviceCalendarExample/SceneDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = ReactNativeDeviceCalendarExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8CE6BEFA6761886610241690 /* TestSupport.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = TestSupport.h; sourceTree = "<group>"; };
+		C3BE84AF82A5174459ED8CFF /* Pods-ReactNativeDeviceCalendarExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeDeviceCalendarExampleTests.debug.xcconfig"; path = "Target Support Files/Pods-ReactNativeDeviceCalendarExampleTests/Pods-ReactNativeDeviceCalendarExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
+		E9F69F06B1E19A5A83A4D70C /* Pods-ReactNativeDeviceCalendarExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeDeviceCalendarExampleTests.release.xcconfig"; path = "Target Support Files/Pods-ReactNativeDeviceCalendarExampleTests/Pods-ReactNativeDeviceCalendarExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F49CEE18FB7A55F0CCA3C805 /* EventKitIntegrationTests.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = EventKitIntegrationTests.mm; sourceTree = "<group>"; };
+		F51D60118050AB54475DDB63 /* ReactNativeDeviceCalendarExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReactNativeDeviceCalendarExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE3BBA10381D6A2DE666C635 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -34,6 +56,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C80B921A6F3F58F76C31292 /* libPods-ReactNativeDeviceCalendarExample.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		90D851E5448F1D14E625A5B1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				864F07E9CDB089EBF0367BC5 /* EventKit.framework in Frameworks */,
+				B9B8B1CBF710E3BEF760CFCD /* libPods-ReactNativeDeviceCalendarExampleTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,8 +89,29 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				5DCACB8F33CDC322A6C60F78 /* libPods-ReactNativeDeviceCalendarExample.a */,
+				6E46D2A4A64B8CE645A472D1 /* iOS */,
+				FE3BBA10381D6A2DE666C635 /* EventKit.framework */,
+				0BDAED178990CE2D935FFE67 /* libPods-ReactNativeDeviceCalendarExampleTests.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3B7529C3D97A8AAABE4801CD /* ReactNativeDeviceCalendarExampleTests */ = {
+			isa = PBXGroup;
+			children = (
+				8CE6BEFA6761886610241690 /* TestSupport.h */,
+				251FC7781B716062E497698F /* DeviceCalendarConversionTests.mm */,
+				F49CEE18FB7A55F0CCA3C805 /* EventKitIntegrationTests.mm */,
+			);
+			name = ReactNativeDeviceCalendarExampleTests;
+			path = ReactNativeDeviceCalendarExampleTests;
+			sourceTree = "<group>";
+		};
+		6E46D2A4A64B8CE645A472D1 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = iOS;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -77,6 +129,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				3B7529C3D97A8AAABE4801CD /* ReactNativeDeviceCalendarExampleTests */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -87,6 +140,7 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* ReactNativeDeviceCalendarExample.app */,
+				F51D60118050AB54475DDB63 /* ReactNativeDeviceCalendarExampleTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -96,6 +150,8 @@
 			children = (
 				3B4392A12AC88292D35C810B /* Pods-ReactNativeDeviceCalendarExample.debug.xcconfig */,
 				5709B34CF0A7D63546082F79 /* Pods-ReactNativeDeviceCalendarExample.release.xcconfig */,
+				E9F69F06B1E19A5A83A4D70C /* Pods-ReactNativeDeviceCalendarExampleTests.release.xcconfig */,
+				C3BE84AF82A5174459ED8CFF /* Pods-ReactNativeDeviceCalendarExampleTests.debug.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -124,6 +180,25 @@
 			productReference = 13B07F961A680F5B00A75B9A /* ReactNativeDeviceCalendarExample.app */;
 			productType = "com.apple.product-type.application";
 		};
+		4761BAE01C793915A20DB62A /* ReactNativeDeviceCalendarExampleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CA5A2F86C6CC205847F4045F /* Build configuration list for PBXNativeTarget "ReactNativeDeviceCalendarExampleTests" */;
+			buildPhases = (
+				09D946428522916A98A45745 /* [CP] Check Pods Manifest.lock */,
+				4735147BF3C1BB5DB9EFA8CC /* Sources */,
+				90D851E5448F1D14E625A5B1 /* Frameworks */,
+				B18514C67471D1F70EA39632 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				697E7BE08A786CFF43BEC90B /* PBXTargetDependency */,
+			);
+			name = ReactNativeDeviceCalendarExampleTests;
+			productName = ReactNativeDeviceCalendarExampleTests;
+			productReference = F51D60118050AB54475DDB63 /* ReactNativeDeviceCalendarExampleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -151,6 +226,7 @@
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* ReactNativeDeviceCalendarExample */,
+				4761BAE01C793915A20DB62A /* ReactNativeDeviceCalendarExampleTests */,
 			);
 		};
 /* End PBXProject section */
@@ -162,6 +238,13 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B18514C67471D1F70EA39632 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -199,6 +282,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ReactNativeDeviceCalendarExample/Pods-ReactNativeDeviceCalendarExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		09D946428522916A98A45745 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ReactNativeDeviceCalendarExampleTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */ = {
@@ -252,7 +357,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4735147BF3C1BB5DB9EFA8CC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B044E6BB8ECF0D011400111E /* DeviceCalendarConversionTests.mm in Sources */,
+				3A6A268922EBC0E8B93E19ED /* EventKitIntegrationTests.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		697E7BE08A786CFF43BEC90B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ReactNativeDeviceCalendarExample;
+			target = 13B07F861A680F5B00A75B9A /* ReactNativeDeviceCalendarExample */;
+			targetProxy = 862E06B77760EFF3CE023817 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
@@ -312,6 +435,31 @@
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
+		};
+		34CEC030C5959AC7D2EF6AE7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C3BE84AF82A5174459ED8CFF /* Pods-ReactNativeDeviceCalendarExampleTests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../../ios",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(inherited)",
+					"-DFOLLY_NO_CONFIG",
+					"-DFOLLY_MOBILE=1",
+					"-DFOLLY_USE_LIBCPP=1",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = ronradtke.reactnativedevicecalendar.example.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ReactNativeDeviceCalendarExample.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ReactNativeDeviceCalendarExample";
+			};
+			name = Debug;
 		};
 		83CBBA201A601CBA00E9B192 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -452,6 +600,32 @@
 			};
 			name = Release;
 		};
+		A62882F154330341064A450B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E9F69F06B1E19A5A83A4D70C /* Pods-ReactNativeDeviceCalendarExampleTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../../ios",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(inherited)",
+					"-DFOLLY_NO_CONFIG",
+					"-DFOLLY_MOBILE=1",
+					"-DFOLLY_USE_LIBCPP=1",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = ronradtke.reactnativedevicecalendar.example.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ReactNativeDeviceCalendarExample.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ReactNativeDeviceCalendarExample";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -469,6 +643,15 @@
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CA5A2F86C6CC205847F4045F /* Build configuration list for PBXNativeTarget "ReactNativeDeviceCalendarExampleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A62882F154330341064A450B /* Release */,
+				34CEC030C5959AC7D2EF6AE7 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

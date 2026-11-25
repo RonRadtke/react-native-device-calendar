@@ -86,6 +86,19 @@ The Android code has two more kinds of tests, run from `example/android`:
 The instrumented tests work in a local calendar of their own and delete it afterwards. With several devices connected, name
 one with `ANDROID_SERIAL`. CI runs all of them, the instrumented ones on an Android 14 emulator.
 
+The iOS code has XCTests in the example's Xcode project, run from `example/ios` after `bundle exec pod install`:
+
+```sh
+# full access to the calendars of a simulator for the example app; restarts the simulator
+./grant-calendar-access.sh <udid>
+
+# the conversion code in memory, and the library against the calendar database of that simulator
+xcodebuild test -workspace ReactNativeDeviceCalendarExample.xcworkspace -scheme ReactNativeDeviceCalendarExample \
+  -destination "id=<udid>"
+```
+
+The EventKit tests also work in a local calendar of their own and skip without full access.
+
 
 ### Commit message convention
 
