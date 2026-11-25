@@ -101,7 +101,7 @@ xcodebuild test -workspace ReactNativeDeviceCalendarExample.xcworkspace -scheme 
   -destination "id=<udid>"
 ```
 
-The EventKit tests also work in a local calendar of their own and skip without full access.
+The EventKit tests also work in a local calendar of their own and skip without full access. CI runs them on a new simulator.
 
 
 ### Commit message convention
