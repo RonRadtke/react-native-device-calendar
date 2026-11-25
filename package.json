@@ -1,6 +1,6 @@
 {
   "name": "@ronradtke/react-native-device-calendar",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Read and write the iOS and Android device calendars from React Native: a small Turbo Module on EventKit and CalendarContract",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
